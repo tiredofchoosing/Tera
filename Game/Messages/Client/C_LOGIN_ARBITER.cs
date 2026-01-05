@@ -29,6 +29,15 @@ namespace Tera.Game.Messages
             Version = reader.Factory.Region.Contains("C") ? 2707 : reader.ReadInt32();//hardcoded EUC/KRC, since its version is not sent via network
             if (!Environment.GetCommandLineArgs().Contains("--toolbox"))
             {
+                var arg = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("--fake-version="));
+                if (arg != null)
+                {
+                    var fakeVersionStr = arg.Split('=')[1];
+                    if (int.TryParse(fakeVersionStr, out int fakeVersion))
+                    {
+                        Version = fakeVersion;
+                    }
+                }
                 reader.Factory.ReleaseVersion = Version;
                 reader.Factory.ReloadSysMsg();
             }
